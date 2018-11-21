@@ -34,19 +34,20 @@ vector<vector<int>> simplify(int l, vector<vector<int>> clauses, vector<vector<i
     if(try_negation) {
         for(int clause_idx=0; clause_idx<variables[abs(l)].size();clause_idx++) {
             int vec_size = clauses_prim[variables[abs(l)][clause_idx]].size();
-            cout << "Tentando remover "  << l <<  " de "  << variables[abs(l)][clause_idx] <<  " \n";
-            clauses_prim[variables[abs(l)][clause_idx]].erase(std::remove(clauses_prim[variables[abs(l)][clause_idx]].begin(),clauses_prim[variables[abs(l)][clause_idx]].end(),l), clauses_prim[variables[abs(l)][clause_idx]].end());
-            if(clauses_prim[variables[abs(l)][clause_idx]].size() == vec_size) {
-                cout << "Tentando remover "  << -l <<  " de "  << variables[abs(l)][clause_idx] <<  " \n";
-                clauses_prim[variables[abs(l)][clause_idx]].erase(std::remove(clauses_prim[variables[abs(l)][clause_idx]].begin(),clauses_prim[variables[abs(l)][clause_idx]].end(),-l), clauses_prim[variables[abs(l)][clause_idx]].end());
-            }
+            cout << "Tentando remover "  << -l <<  " de "  << variables[abs(l)][clause_idx] <<  " \n";
+            clauses_prim[variables[abs(l)][clause_idx]].erase(std::remove(clauses_prim[variables[abs(l)][clause_idx]].begin(),clauses_prim[variables[abs(l)][clause_idx]].end(),-l), clauses_prim[variables[abs(l)][clause_idx]].end());
         }
     }
     return clauses_prim;
 }
 
 
+///////////// SIMPLIFY TEM QUE EXCLUIR CLAUSES TB!!!
+
+
 vector<int> solver(vector<int> w, vector<vector<int>> variables,vector<vector<int>> clauses) {
+    cout << "Comecando novo solver; Press any key;"; 
+    cin.get();
     int v = rand() % variables.size();
     cout << " rand v = " << v << "\n";
    //TODO: Changer cette partie pour prendre une variable que n'a pas ete deja prise.
@@ -97,7 +98,7 @@ vector<int> solver(vector<int> w, vector<vector<int>> variables,vector<vector<in
 }
 
 int main() {
-    vector<vector<int>> variables = {{0},{2},{1,2},{0,1,2},{1}};
+    vector<vector<int>> variables = {{},{0},{2},{1,2},{0,1,2},{1}};
     vector<vector<int>> clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
 
     auto result = solver(vector<int>(), variables, clauses);
@@ -106,20 +107,6 @@ int main() {
     for(int k=0; k<result.size();k++) {
         cout << result[k] << " "; 
     }
-
-    // auto simplified = simplify(1, clauses, variables);
-    // printVecVec(simplified);
-
-    // simplified = simplify(3, simplified, variables);
-    // printVecVec(simplified);
-
-    // simplified = simplify(4, simplified, variables);
-    // for(int k=0; k<simplified.size();k++) {
-    //     for(int i=0; i<simplified[k].size();i++) {
-    //         cout << simplified[k][i] << " "; 
-    //     }
-    //     cout << "\n"; 
-    // }
 
     return 1;
 }
