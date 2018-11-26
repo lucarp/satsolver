@@ -2,14 +2,15 @@
 #include <vector>
 #include <algorithm>
 #include <set>
+#include "parser_input.h"
 
 using namespace std;
 
 void printVec(vector<int> vec) {
     for(int k=0; k<vec.size();k++) {
-        cout << vec[k] << " "; 
+        cout << vec[k] << " ";
     }
-    cout << "\n"; 
+    cout << "\n";
 }
 
 void printSet(set<int> vec) {
@@ -18,15 +19,15 @@ void printSet(set<int> vec) {
         cout << (*it) << " ";
         it++;
     }
-    cout << "\n"; 
+    cout << "\n";
 }
 
 void printVecVec(vector<vector<int>> vec) {
     for(int k=0; k<vec.size();k++) {
         for(int i=0; i<vec[k].size();i++) {
-            cout << vec[k][i] << " "; 
+            cout << vec[k][i] << " ";
         }
-        cout << "\n"; 
+        cout << "\n";
     }
 }
 
@@ -59,13 +60,13 @@ vector<vector<int>> simplify(int l, vector<vector<int>> clauses) {
 set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
     int v=(rand() % num_var)+1;;
     bool choose_another = true;
-   
+
     cout << " rand v = " << v << "\n";
    //TODO: Changer cette partie pour prendre une variable que n'a pas ete deja prise.
-   
+
    auto clauses_prim = simplify(v, clauses);
-   cout << "Prim clauses = \n"; printVecVec(clauses_prim); 
-   
+   cout << "Prim clauses = \n"; printVecVec(clauses_prim);
+
    //Verifie si il n'y ont que clauses vides
    bool clauses_prim_contains_empty_clause = false;
    for(auto clause : clauses_prim) {
@@ -76,7 +77,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
        return w;
    }
    else {
-       if(clauses_prim_contains_empty_clause) { 
+       if(clauses_prim_contains_empty_clause) {
             auto clauses_prim_prim = simplify(-v, clauses);
             cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
             bool clauses_prim_prim_contains_empty_clause = false;
@@ -100,18 +101,21 @@ set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
             if(clauses_prim.size() < clauses.size() && v > 0){
                 w.insert(v);
             }
-           
+
            return solver(w, num_var, clauses_prim);
        }
    }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+    //vector<vector<int>> clauses = toParseInput(argv[1]);
+
     //vector<vector<int>> clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
-    vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
+
+    // vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
 
     auto result = solver(set<int>(), 3, clauses);
-    cout << "RESULTADO: " << result.size() << "\n"; 
+    cout << "RESULTADO: " << result.size() << "\n";
     printSet(result);
 
     return 1;
