@@ -49,7 +49,7 @@ vector<string> splitStrings(string str,  char dl){
   vector<int>  toParseOut(string path){
     vector<int> res;
     ifstream myfile;
-    myfile.open(path);
+    myfile.open(path.c_str());
     string strOneLine;
     int nbVar;
     int nbClause;
@@ -70,8 +70,8 @@ vector<string> splitStrings(string str,  char dl){
 
            if (lineSplitted.size()>0){
              for (int i=1; i<lineSplitted.size();i++){
-               cout<<" stoi i " << stoi(lineSplitted[i]) << " | ";
-               res.push_back(stoi(lineSplitted[i]));
+               cout<<" stoi i " << atoi(lineSplitted[i].c_str()) << " | ";
+               res.push_back(atoi(lineSplitted[i].c_str()));
              }
              cout<<" size of the result "<< res.size() << "\n";
              cout << "\n";

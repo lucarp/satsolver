@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <set>
-#include "parser_input.h"
+#include "parser_input.cc"
 
 using namespace std;
 
@@ -22,7 +22,7 @@ void printSet(set<int> vec) {
     cout << "\n";
 }
 
-void printVecVec(vector<vector<int>> vec) {
+void printVecVec(vector<vector<int> > vec) {
     for(int k=0; k<vec.size();k++) {
         for(int i=0; i<vec[k].size();i++) {
             cout << vec[k][i] << " ";
@@ -31,10 +31,10 @@ void printVecVec(vector<vector<int>> vec) {
     }
 }
 
-vector<vector<int>> simplify(int l, vector<vector<int>> clauses) {
-    vector<vector<int>> clauses_prim = clauses;
+vector<vector<int> > simplify(int l, vector<vector<int> > clauses) {
+    vector<vector<int> > clauses_prim = clauses;
     bool try_negation=true;
-    for(vector<vector<int>>::iterator it=clauses_prim.begin(); it!=clauses_prim.end();) {
+    for(vector<vector<int> >::iterator it=clauses_prim.begin(); it!=clauses_prim.end();) {
         bool removed_clause = false;
         for(int search_idx=0; search_idx<it->size(); search_idx++) {
             // cout << "Tentando remover da clause "  << (*it)[search_idx] << " - "  << l <<  " \n";
@@ -57,15 +57,16 @@ vector<vector<int>> simplify(int l, vector<vector<int>> clauses) {
 ///////////// SIMPLIFY TEM QUE EXCLUIR CLAUSES TB!!!
 
 
-set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
+set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
     int v=(rand() % num_var)+1;;
     bool choose_another = true;
 
     cout << " rand v = " << v << "\n";
    //TODO: Changer cette partie pour prendre une variable que n'a pas ete deja prise.
 
-   auto clauses_prim = simplify(v, clauses);
-   cout << "Prim clauses = \n"; printVecVec(clauses_prim);
+   vector<vector<int> > clauses_prim = simplify(v, clauses);
+   cout << "Prim clauses = \n";
+   printVecVec(clauses_prim);
 
    //Verifie si il n'y ont que clauses vides
    bool clauses_prim_contains_empty_clause = false;
@@ -108,11 +109,15 @@ set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
 }
 
 int main(int argc, char* argv[]) {
-    //vector<vector<int>> clauses = toParseInput(argv[1]);
+    vector<vector<int> > clauses = toParseInput(argv[1]);
+    cout << " clauses size parser_input " << clauses.size() << "\n";
+    for (int i=0; i<clauses.size(); i++){
+      cout << " clause size (of each line ) " << clauses[i].size() << "\n";
 
-    //vector<vector<int>> clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
+    }
+    //vector<vector<int> > clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
 
-    // vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
+    // vector<vector<int> > clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
 
     auto result = solver(set<int>(), 3, clauses);
     cout << "RESULTADO: " << result.size() << "\n";
