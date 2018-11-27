@@ -87,4 +87,5 @@ vector<string> splitStrings(string str,  char dl){
 
 int main(int argc, char* argv[]){
     toParseOut(argv[1]);
+    
 }

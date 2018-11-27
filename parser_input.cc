@@ -70,8 +70,11 @@ vector<string> splitStrings(string str,  char dl){
          else if (nbLine>0){
            if (lineSplitted.size()>0){
              for (int i=0; i<lineSplitted.size();i++){
-               cout<<" atoi i " << atoi(lineSplitted[i].c_str()) << " | ";
-               oneline.push_back(atoi(lineSplitted[i].c_str()));
+               if ( atoi(lineSplitted[i].c_str())!= 0) {
+                 cout<<" atoi i " << atoi(lineSplitted[i].c_str()) << " | ";
+                 oneline.push_back(atoi(lineSplitted[i].c_str()));
+               }
+
 
              }
              cout<<"size of one clause "<< oneline.size() << "\n";

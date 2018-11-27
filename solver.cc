@@ -70,9 +70,12 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
 
    //Verifie si il n'y ont que clauses vides
    bool clauses_prim_contains_empty_clause = false;
-   for(auto clause : clauses_prim) {
-       if(clause.size() == 0) clauses_prim_contains_empty_clause = true;
+   for(vector<int> clause : clauses_prim) {
+       if(clause.size() == 0){
+        clauses_prim_contains_empty_clause = true;
+      }
    }
+
    if(clauses_prim.size() == 0) {
        w.insert(v);
        return w;
@@ -109,15 +112,11 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
 }
 
 int main(int argc, char* argv[]) {
-    vector<vector<int> > clauses = toParseInput(argv[1]);
-    cout << " clauses size parser_input " << clauses.size() << "\n";
-    for (int i=0; i<clauses.size(); i++){
-      cout << " clause size (of each line ) " << clauses[i].size() << "\n";
+    //vector<vector<int>> clauses = toParseInput(argv[1]);
 
-    }
     //vector<vector<int> > clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
 
-    // vector<vector<int> > clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
+    vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
 
     auto result = solver(set<int>(), 3, clauses);
     cout << "RESULTADO: " << result.size() << "\n";
