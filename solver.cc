@@ -82,7 +82,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
    }
    else {
        if(clauses_prim_contains_empty_clause) {
-            auto clauses_prim_prim = simplify(-v, clauses);
+            vector<vector<int>> clauses_prim_prim = simplify(-v, clauses);
             cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
             bool clauses_prim_prim_contains_empty_clause = false;
             for(int clause=0; clause<clauses_prim_prim.size(); clause++) {
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
 
     //vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
 
-    auto result = solver(set<int>(), 5, clauses);
+    vector<int> result = solver(set<int>(), 5, clauses);
     cout << "RESULTADO: " << result.size() << "\n";
     printSet(result);
 
