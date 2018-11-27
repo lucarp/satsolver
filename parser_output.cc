@@ -46,8 +46,8 @@ vector<string> splitStrings(string str,  char dl){
   return substr_list;
   }
 
-  vector<int>  toParseOut(string path){
-    vector<int> res;
+  int  toParseOut(string path){
+    int res;
     ifstream myfile;
     myfile.open(path.c_str());
     string strOneLine;
@@ -64,19 +64,16 @@ vector<string> splitStrings(string str,  char dl){
 
          if (nbLine==0){
            satiOrNotSati = lineSplitted.at(1);
-           cout << satiOrNotSati << "\n";
-         }
-         else {
-
-           if (lineSplitted.size()>0){
-             for (int i=1; i<lineSplitted.size();i++){
-               cout<<" stoi i " << atoi(lineSplitted[i].c_str()) << " | ";
-               res.push_back(atoi(lineSplitted[i].c_str()));
-             }
-             cout<<" size of the result "<< res.size() << "\n";
-             cout << "\n";
+           if (satiOrNotSati.compare("SATISFIABLE") == 0){
+             res = 1;
            }
+          else{
+             res = 0;
+           }
+           cout << satiOrNotSati << "  "<< res<< "\n";
          }
+
+
          nbLine++;
 
     }
@@ -87,5 +84,5 @@ vector<string> splitStrings(string str,  char dl){
 
 int main(int argc, char* argv[]){
     toParseOut(argv[1]);
-    
+
 }
