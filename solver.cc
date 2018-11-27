@@ -1,8 +1,11 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <algorithm>
 #include <set>
 #include "parser_input.cc"
+#include "parser_output.cc"
+
 
 using namespace std;
 
@@ -113,28 +116,48 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
 }
 
 int main(int argc, char* argv[]) {
+    vector<string> instanceFullName = splitStrings(argv[1], '/');
+    vector<string> instanceName = splitStrings(instanceFullName[2], '.');
+    cout <<"size "<< instanceName.size() << "\n";
+
     vector<vector<int> > clauses = toParseInput(argv[1]);
 
     //vector<vector<int> > clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
 
-    // cout << "Importing file " << argv[1];
-    // vector<vector<int> > clauses = toParseInput(argv[1]);
-    // cout << " clauses size parser_input " << clauses.size() << "\n";
-    // for (int i=0; i<clauses.size(); i++) {
-    //   cout << " clause size (of each line ) " << clauses[i].size() << "\n";
 
-    // }
-<<<<<<< HEAD
-    vector<vector<int>> clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
-=======
-    //vector<vector<int> > clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
->>>>>>> 5b4bdbf36960b175a5370ad771024581978f2ab7
+    //vector<vector<int>> clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
+
+    
 
 
     //vector<vector<int> > clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
 
     set<int> result = solver(set<int>(), 5, clauses);
+
     cout << "RESULTADO: " << result.size() << "\n";
+    int res;
+    if (result.size() == 0){
+      res =0;
+    }
+    if (result.size() > 0){
+      res =1;
+    }
+    stringstream ss;
+    ss << argv[1] << ".log";
+    string logfile = ss.str();
+    if (res == toParseOut(logfile)){
+      cout << "SUCCES for instance " << instanceName[0]  <<" and it is";
+      if (res==1){
+        cout <<" SATISFIABLE";
+      }
+      if (res==0){
+        cout <<" UNSATISFIABLE";
+      }
+    }
+    else {
+      cout << "FAIL for instance " <<  instanceName[0] ;
+    }
+    cout << "\n";
     printSet(result);
 
     return 1;

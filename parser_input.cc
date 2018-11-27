@@ -65,18 +65,18 @@ vector<vector<int> > toParseInput(string path){
 
           nbVar = atoi(lineSplitted.at(2).c_str());
           nbClause = atoi(lineSplitted.at(3).c_str());
-          cout << "strOneLine "<<strOneLine << endl;
+          //cout << "strOneLine "<<strOneLine << endl;
         }
         else if (nbLine>0){
           if (lineSplitted.size()>0){
             for (int i=0; i<lineSplitted.size();i++){
               if (atoi(lineSplitted[i].c_str())!=0){
 
-                cout<<" atoi i " << atoi(lineSplitted[i].c_str()) << " | ";
+                //cout<<" atoi i " << atoi(lineSplitted[i].c_str()) << " | ";
                 oneline.push_back(atoi(lineSplitted[i].c_str()));
               }
             }
-            cout<<"size of one clause "<< oneline.size() << "\n";
+            //cout<<"size of one clause "<< oneline.size() << "\n";
             cout << "\n";
             res.push_back(oneline);
           }
@@ -87,8 +87,7 @@ vector<vector<int> > toParseInput(string path){
 
 
   myfile.close();
-  cout<<"size of vec clauses "<< res.size() << "\n";
+  //cout<<"size of vec clauses "<< res.size() << "\n";
   return res;
 
 }
-

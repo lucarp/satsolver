@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<string> splitStrings(string str,  char dl){
+vector<string> splitStrings2(string str,  char dl){
   string word = "";
 
   // to count the number of split strings
@@ -60,7 +60,7 @@ vector<string> splitStrings(string str,  char dl){
 
     while (myfile){
          getline(myfile, strOneLine);
-         vector<string> lineSplitted = splitStrings(strOneLine, ' ');
+         vector<string> lineSplitted = splitStrings2(strOneLine, ' ');
 
          if (nbLine==0){
            satiOrNotSati = lineSplitted.at(1);
@@ -70,7 +70,7 @@ vector<string> splitStrings(string str,  char dl){
           else{
              res = 0;
            }
-           cout << satiOrNotSati << "  "<< res<< "\n";
+           //cout << satiOrNotSati << "  "<< res<< "\n";
          }
 
 
@@ -79,10 +79,5 @@ vector<string> splitStrings(string str,  char dl){
     }
     myfile.close();
     return res;
-
-}
-
-int main(int argc, char* argv[]){
-    toParseOut(argv[1]);
 
 }
