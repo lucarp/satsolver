@@ -112,13 +112,24 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
 }
 
 int main(int argc, char* argv[]) {
+<<<<<<< HEAD
     //vector<vector<int>> clauses = toParseInput(argv[1]);
 
     //vector<vector<int> > clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
+=======
+    // cout << "Importing file " << argv[1];
+    // vector<vector<int>> clauses = toParseInput(argv[1]);
+    // cout << " clauses size parser_input " << clauses.size() << "\n";
+    // for (int i=0; i<clauses.size(); i++) {
+    //   cout << " clause size (of each line ) " << clauses[i].size() << "\n";
+
+    // }
+    vector<vector<int> > clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
+>>>>>>> adcd0c95e19b0ef707ab9e169a58b93b4f125c49
 
     vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
 
-    auto result = solver(set<int>(), 3, clauses);
+    auto result = solver(set<int>(), 5, clauses);
     cout << "RESULTADO: " << result.size() << "\n";
     printSet(result);
 
