@@ -89,7 +89,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
                 if(clauses_prim_prim[clause].size() == 0) clauses_prim_prim_contains_empty_clause = true;
             }
             if(clauses_prim_prim.size() == 0) {
-                //w.insert(-v);
+                w.insert(-v);
                 return w;
             }
             else {
@@ -97,6 +97,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
                     return set<int>();
                 }
                 else {
+                    w.insert(-v);
                     return solver(w, num_var, clauses_prim_prim);
                 }
             }
@@ -112,7 +113,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int>> clauses) {
 }
 
 int main(int argc, char* argv[]) {
-    vector<vector<int>> clauses = toParseInput(argv[1]);
+    // vector<vector<int>> clauses = toParseInput(argv[1]);
 
     //vector<vector<int>> clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
 
@@ -123,7 +124,7 @@ int main(int argc, char* argv[]) {
     //   cout << " clause size (of each line ) " << clauses[i].size() << "\n";
 
     // }
-    //vector<vector<int>> clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
+    vector<vector<int>> clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
 
 
     //vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
