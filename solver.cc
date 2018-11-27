@@ -70,8 +70,8 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
 
    //Verifie si il n'y ont que clauses vides
    bool clauses_prim_contains_empty_clause = false;
-   for(vector<int> clause : clauses_prim) {
-       if(clause.size() == 0){
+   for(int clause=0; clause<clauses_prim.size(); clause++) {
+       if(clauses_prim[clause].size() == 0){
         clauses_prim_contains_empty_clause = true;
       }
    }
@@ -85,8 +85,8 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
             auto clauses_prim_prim = simplify(-v, clauses);
             cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
             bool clauses_prim_prim_contains_empty_clause = false;
-            for(auto clause : clauses_prim_prim) {
-                if(clause.size() == 0) clauses_prim_prim_contains_empty_clause = true;
+            for(int clause=0; clause<clauses_prim_prim.size(); clause++) {
+                if(clauses_prim_prim[clause].size() == 0) clauses_prim_prim_contains_empty_clause = true;
             }
             if(clauses_prim_prim.size() == 0) {
                 //w.insert(-v);
@@ -112,11 +112,10 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
 }
 
 int main(int argc, char* argv[]) {
-<<<<<<< HEAD
-    //vector<vector<int>> clauses = toParseInput(argv[1]);
+    vector<vector<int>> clauses = toParseInput(argv[1]);
 
     //vector<vector<int> > clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
-=======
+
     // cout << "Importing file " << argv[1];
     // vector<vector<int>> clauses = toParseInput(argv[1]);
     // cout << " clauses size parser_input " << clauses.size() << "\n";
@@ -124,10 +123,10 @@ int main(int argc, char* argv[]) {
     //   cout << " clause size (of each line ) " << clauses[i].size() << "\n";
 
     // }
-    vector<vector<int> > clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
->>>>>>> adcd0c95e19b0ef707ab9e169a58b93b4f125c49
+    //vector<vector<int> > clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
 
-    vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
+
+    //vector<vector<int>> clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
 
     auto result = solver(set<int>(), 5, clauses);
     cout << "RESULTADO: " << result.size() << "\n";

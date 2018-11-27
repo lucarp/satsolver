@@ -46,47 +46,6 @@ vector<string> splitStrings(string str,  char dl){
   return substr_list;
 }
 
-<<<<<<< HEAD
-  vector<vector<int> > toParseInput(string path){
-    vector<vector<int> > res;
-    ifstream myfile;
-    myfile.open(path.c_str());
-    string strOneLine;
-    int nbVar;
-    int nbClause;
-    int nbLine=0;
-
-
-    while (myfile){
-         getline(myfile, strOneLine);
-         vector<int> oneline;
-         vector<string> lineSplitted = splitStrings(strOneLine, ' ');
-
-         if (nbLine==0){
-
-           nbVar = atoi(lineSplitted.at(2).c_str());
-           nbClause = atoi(lineSplitted.at(3).c_str());
-           cout << "strOneLine "<<strOneLine << endl;
-         }
-         else if (nbLine>0){
-           if (lineSplitted.size()>0){
-             for (int i=0; i<lineSplitted.size();i++){
-               if ( atoi(lineSplitted[i].c_str())!= 0) {
-                 cout<<" atoi i " << atoi(lineSplitted[i].c_str()) << " | ";
-                 oneline.push_back(atoi(lineSplitted[i].c_str()));
-               }
-
-
-             }
-             cout<<"size of one clause "<< oneline.size() << "\n";
-             cout << "\n";
-             res.push_back(oneline);
-           }
-
-         }
-         nbLine++;
-      }
-=======
 vector<vector<int> > toParseInput(string path){
   vector<vector<int> > res;
   ifstream myfile;
@@ -95,7 +54,6 @@ vector<vector<int> > toParseInput(string path){
   int nbVar;
   int nbClause;
   int nbLine=0;
->>>>>>> adcd0c95e19b0ef707ab9e169a58b93b4f125c49
 
 
   while (myfile){
@@ -112,9 +70,11 @@ vector<vector<int> > toParseInput(string path){
         else if (nbLine>0){
           if (lineSplitted.size()>0){
             for (int i=0; i<lineSplitted.size();i++){
-              cout<<" atoi i " << atoi(lineSplitted[i].c_str()) << " | ";
-              oneline.push_back(atoi(lineSplitted[i].c_str()));
+              if (atoi(lineSplitted[i].c_str())!=0){
 
+                cout<<" atoi i " << atoi(lineSplitted[i].c_str()) << " | ";
+                oneline.push_back(atoi(lineSplitted[i].c_str()));
+              }
             }
             cout<<"size of one clause "<< oneline.size() << "\n";
             cout << "\n";
