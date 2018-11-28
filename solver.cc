@@ -94,11 +94,11 @@ solverResult solver(vector<int> w,int num_var, vector<vector<int> > clauses) {
         }
     }
 
-    cout << " rand v = " << v << "\n";
+    // cout << " rand v = " << v << "\n";
 
    vector<vector<int> > clauses_prim = simplify(v, clauses);
-    cout << "Prim clauses = \n";
-   printVecVec(clauses_prim);
+//     cout << "Prim clauses = \n";
+//    printVecVec(clauses_prim);
 
    //Verifie si il n'y ont que clauses vides
    bool clauses_prim_contains_empty_clause = false;
@@ -128,7 +128,7 @@ solverResult solver(vector<int> w,int num_var, vector<vector<int> > clauses) {
    else {       
        if(clauses_prim_contains_empty_clause) {
             vector<vector<int> > clauses_prim_prim = simplify(-v, clauses);
-            cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
+            // cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
             bool clauses_prim_prim_contains_empty_clause = false;
             vector<int> opposing(num_var+1,0);
             for(int clause=0; clause<clauses_prim_prim.size(); clause++) {
@@ -144,7 +144,6 @@ solverResult solver(vector<int> w,int num_var, vector<vector<int> > clauses) {
 
                     }
                     else{
-                        cout << "FALSE\n ";
                         opposing[abs(clauses_prim_prim[clause][0])] = clauses_prim_prim[clause][0];
                     }
                 }
