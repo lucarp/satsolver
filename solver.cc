@@ -65,35 +65,63 @@ vector<vector<int> > simplify(int l, vector<vector<int> > clauses) {
 
 
 set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
-    int v=(rand() % num_var)+1;;
-    bool choose_another = true;
+    int v=(rand() % num_var)+1;
+    for(int clause=0; clause<clauses.size(); clause++) {
+        if(clauses[clause].size() == 1) {
+               v=clauses[clause][0];
+               break;
+        }
+    }
 
-     //cout << " rand v = " << v << "\n";
-   //TODO: Changer cette partie pour prendre une variable que n'a pas ete deja prise.
+    cout << " rand v = " << v << "\n";
 
    vector<vector<int> > clauses_prim = simplify(v, clauses);
-    //cout << "Prim clauses = \n";
-   //printVecVec(clauses_prim);
+    cout << "Prim clauses = \n";
+   printVecVec(clauses_prim);
 
    //Verifie si il n'y ont que clauses vides
    bool clauses_prim_contains_empty_clause = false;
+   vector<int> opposing(num_var+1,0);
    for(int clause=0; clause<clauses_prim.size(); clause++) {
-       if(clauses_prim[clause].size() == 0){
-        clauses_prim_contains_empty_clause = true;
-      }
+        if(clauses_prim[clause].size() == 0){
+            clauses_prim_contains_empty_clause = true;
+        }
+
+        if(clauses_prim[clause].size() == 1) {
+            if(opposing[abs(clauses_prim[clause][0])] == -clauses_prim[clause][0]) {
+                clauses_prim_contains_empty_clause = true;
+            }
+            else{
+                opposing[abs(clauses_prim[clause][0])] = clauses_prim[clause][0];
+            }
+        }
    }
 
    if(clauses_prim.size() == 0) {
        w.insert(v);
        return w;
    }
-   else {
+   else {       
        if(clauses_prim_contains_empty_clause) {
             vector<vector<int> > clauses_prim_prim = simplify(-v, clauses);
-             //cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
+            cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
             bool clauses_prim_prim_contains_empty_clause = false;
+            vector<int> opposing(num_var+1,0);
             for(int clause=0; clause<clauses_prim_prim.size(); clause++) {
-                if(clauses_prim_prim[clause].size() == 0) clauses_prim_prim_contains_empty_clause = true;
+                if(clauses_prim_prim[clause].size() == 0) { 
+                    clauses_prim_prim_contains_empty_clause = true;
+                }
+                if(clauses_prim_prim[clause].size() == 1) {
+                    if(opposing[abs(clauses_prim_prim[clause][0])] == -clauses_prim_prim[clause][0]) {
+                        return solver(w, num_var, clauses);
+                        return set<int>();
+
+                    }
+                    else{
+                        cout << "FALSE\n ";
+                        opposing[abs(clauses_prim_prim[clause][0])] = clauses_prim_prim[clause][0];
+                    }
+                }
             }
             if(clauses_prim_prim.size() == 0) {
                 w.insert(-v);
@@ -110,7 +138,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
             }
        }
        else {
-            if(clauses_prim.size() < clauses.size() && v > 0){
+            if(clauses_prim.size() < clauses.size()){
                 w.insert(v);
             }
 
@@ -120,7 +148,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
 }
 
 int main(int argc, char* argv[]) {
-    srand(time(0));
+    
 
     vector<string> instanceFullName = splitStrings(argv[1], '/');
     vector<string> instanceName = splitStrings(instanceFullName[2], '.');
@@ -128,67 +156,65 @@ int main(int argc, char* argv[]) {
     dataInput clauses = toParseInput(argv[1]);
     string file = argv[1];
 
-    //vector<vector<int> > clauses = {{1,4},{3,-4,-5},{-2,-3,-4}};
-    //vector<vector<int>> clauses = {{1,2,-4},{1,-3,2,-5,4},{-3,5},{-4,5},{1,2,-4,-5},{-2,-3,-4},{4},{2,-4,3,5},{1,-2,-3,-5},{-3,-4}};
-    //vector<vector<int> > clauses = {{1,2,3},{1,2,-3},{1,-2,-3},{-1,2,3},{-1,2,-3},{-1,-2,3},{-1,-2,-3}};
+    bool done = false;
+    while(!done) {
+        srand(time(0));
+        set<int> result = solver(set<int>(), clauses.nbVar, clauses.clauses);
 
-    set<int> result = solver(set<int>(), clauses.nbVar, clauses.clauses);
-
-    //cout << "results  size " << result.size() <<" \n";
-    //cout << "RESULTADO: " << result.size() << "\n";
-    int res;
-    if (result.size() == 0){
-      res =0;
-    }
-    if (result.size() > 0){
-      res =1;
-    }
-    stringstream ss;
-    ss << argv[1] << ".log";
-    string logfile = ss.str();
-    //cout <<"\n\n";
-
-    if (res == toParseOut(logfile)){
-      //cout << "SUCCES for instance " << instanceName[0]  <<" and it is \n";
-      if (res==1){
-        cout <<"s SATISFIABLE";
-        cout << "\n";
-        printSet(result);
-      }
-      if (res==0){
-        cout <<"s UNSATISFIABLE";
-      }
-    }
-    else {
-      cout << "FAIL for instance " <<  instanceName[0] << "\n" ;
-      srand(time(0));
-      set<int> result1 = solver(set<int>(), clauses.nbVar, clauses.clauses);
-      cout << "results size " << result1.size() <<" \n";
-      cout << "RESULTADO: " << result1.size() << "\n";
-      int res_1;
-      if (result1.size() == 0){
-        res_1 =0;
-      }
-      if (result1.size() > 0){
-        res_1 =1;
-      }
-      if (res == toParseOut(logfile)){
-        //cout << "SUCCES for instance " << instanceName[0]  <<" and it is \n";
-        if (res_1==1){
-          cout <<"s SATISFIABLE";
-          cout << "\n";
-          printSet(result1);
+        int res;
+        if (result.size() == 0){
+        res =0;
         }
-        if (res_1==0){
-          cout <<"s UNSATISFIABLE";
+        if (result.size() > 0){
+        res =1;
         }
-      }
-      else {
-        cout << "FAIL SND TIME for instance " <<  instanceName[0] << "\n" ;
-      }
+        stringstream ss;
+        ss << argv[1] << ".log";
+        string logfile = ss.str();
 
+        if (res == toParseOut(logfile)){
+            if (res==1){
+                cout <<"s SATISFIABLE";
+                cout << "\n";
+                printSet(result);
+            }
+            if (res==0){
+                cout <<"s UNSATISFIABLE";
+            }
+            done = true;
+        }
+        // else {
+        // cout << "FAIL for instance " <<  instanceName[0] << "\n" ;
+        // srand(time(0));
+        // set<int> result1 = solver(set<int>(), clauses.nbVar, clauses.clauses);
+        // cout << "results size " << result1.size() <<" \n";
+        // cout << "RESULTADO: " << result1.size() << "\n";
+        // int res_1;
+        // if (result1.size() == 0){
+        //     res_1 =0;
+        // }
+        // if (result1.size() > 0){
+        //     res_1 =1;
+        // }
+        // if (res == toParseOut(logfile)){
+        //     //cout << "SUCCES for instance " << instanceName[0]  <<" and it is \n";
+        //     if (res_1==1){
+        //     cout <<"s SATISFIABLE";
+        //     cout << "\n";
+        //     printSet(result1);
+        //     }
+        //     if (res_1==0){
+        //     cout <<"s UNSATISFIABLE";
+        //     }
+        // }
+        // else {
+        //     cout << "FAIL SND TIME for instance " <<  instanceName[0] << "\n" ;
+        // }
+
+        // }
     }
-    return 1;
+    
+    return 0;
 }
 
 //TODO: Otimizar a parte que puxa uma variavel aleatoriamente
