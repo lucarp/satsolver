@@ -21,8 +21,8 @@ void printVec(vector<int> vec) {
     cout << "\n";
 }
 
-void printSet(set<int> vec) {
-    set<int>::iterator it = vec.begin();
+void printSet(vector<int> vec) {
+    vector<int>::iterator it = vec.begin();
     if (vec.size()>0){
       cout << "v ";
 
@@ -67,7 +67,7 @@ vector<vector<int> > simplify(int l, vector<vector<int> > clauses) {
 
 
 
-set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
+solverResult solver(vector<int> w,int num_var, vector<vector<int> > clauses) {
     int v=(rand() % num_var)+1;
     bool unit_clause_found = false;
     for(int clause=0; clause<clauses.size(); clause++) {
@@ -119,8 +119,11 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
    }
 
    if(clauses_prim.size() == 0) {
-       w.insert(v);
-       return w;
+       if(std::find(w.begin(), w.end(), v) == w.end()) w.push_back(v);
+       solverResult result;
+       result.satisfiable = true;
+       result.status = w;
+       return result;
    }
    else {       
        if(clauses_prim_contains_empty_clause) {
@@ -134,8 +137,10 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
                 }
                 if(clauses_prim_prim[clause].size() == 1) {
                     if(opposing[abs(clauses_prim_prim[clause][0])] == -clauses_prim_prim[clause][0]) {
-                        return solver(w, num_var, clauses);
-                        //return set<int>();
+                        solverResult result;
+                        result.satisfiable = false;
+                        result.status = w;
+                        return result;
 
                     }
                     else{
@@ -145,24 +150,29 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
                 }
             }
             if(clauses_prim_prim.size() == 0) {
-                w.insert(-v);
-                return w;
+                if(std::find(w.begin(), w.end(), -v) == w.end()) w.push_back(-v);
+                solverResult result;
+                result.satisfiable = true;
+                result.status = w;
+                return result;
             }
             else {
                 if(clauses_prim_prim_contains_empty_clause) {
-                    return set<int>();
+                    solverResult result;
+                    result.satisfiable = false;
+                    result.status = w;
+                    return result;
                 }
                 else {
-                    w.insert(-v);
+                    if(std::find(w.begin(), w.end(), v) == w.end()) w.push_back(-v);
                     return solver(w, num_var, clauses_prim_prim);
                 }
             }
        }
        else {
             if(clauses_prim.size() < clauses.size()){
-                w.insert(v);
+                if(std::find(w.begin(), w.end(), v) == w.end()) w.push_back(v);
             }
-
            return solver(w, num_var, clauses_prim);
        }
    }
@@ -179,36 +189,22 @@ int main(int argc, char* argv[]) {
 
     bool done = false;
     srand(time(0));
-    set<int> result = solver(set<int>(), clauses.nbVar, clauses.clauses);
-    while(!done) {
+    solverResult result = solver(vector<int>(), clauses.nbVar, clauses.clauses);
+    while(result.status.size() > 0) {
         srand(time(0));
-        set<int> result = solver(set<int>(), clauses.nbVar, clauses.clauses);
+        result = solver(result.status, clauses.nbVar, clauses.clauses);
 
-        int res;
-        if (result.size() == 0){
-        res =0;
+        if (result.satisfiable){
+            cout <<"s SATISFIABLE";
+            cout << "\n";
+            printSet(result.status);
+            return 0;
         }
-        if (result.size() > 0){
-        res =1;
-        }
-        stringstream ss;
-        ss << argv[1] << ".log";
-        string logfile = ss.str();
-
-        if (res == toParseOut(logfile)){
-            if (res==1){
-                cout <<"s SATISFIABLE";
-                cout << "\n";
-                printSet(result);
-            }
-            if (res==0){
-                cout <<"s UNSATISFIABLE";
-            }
-            done = true;
+        else {
+            result.status.pop_back();
         }
     }
-    
+    printSet(result.status);
+    cout <<"s UNSATISFIABLE";
     return 0;
 }
-
-//TODO: Otimizar a parte que puxa uma variavel aleatoriamente
