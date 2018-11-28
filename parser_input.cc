@@ -5,7 +5,13 @@
 #include <sstream>
 #include <string>
 
+
 using namespace std;
+
+struct dataInput {
+  vector<vector<int> > clauses;
+  int nbVar;
+};
 
 vector<string> splitStrings(string str,  char dl){
   string word = "";
@@ -46,7 +52,8 @@ vector<string> splitStrings(string str,  char dl){
   return substr_list;
 }
 
-vector<vector<int> > toParseInput(string path){
+dataInput toParseInput(string path){
+  dataInput dInp;
   vector<vector<int> > res;
   ifstream myfile;
   myfile.open(path.c_str());
@@ -77,17 +84,19 @@ vector<vector<int> > toParseInput(string path){
               }
             }
             //cout<<"size of one clause "<< oneline.size() << "\n";
-            cout << "\n";
+            //cout << "\n";
             res.push_back(oneline);
           }
 
         }
         nbLine++;
     }
+  dInp.clauses = res;
+  dInp.nbVar = nbVar;
 
 
   myfile.close();
   //cout<<"size of vec clauses "<< res.size() << "\n";
-  return res;
+  return dInp;
 
 }
