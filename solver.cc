@@ -9,6 +9,11 @@
 
 using namespace std;
 
+struct solverResult {
+  vector<int> status;
+  bool satisfiable;
+};
+
 void printVec(vector<int> vec) {
     for(int k=0; k<vec.size();k++) {
         cout << vec[k] << " ";
@@ -61,15 +66,31 @@ vector<vector<int> > simplify(int l, vector<vector<int> > clauses) {
 }
 
 
-///////////// SIMPLIFY TEM QUE EXCLUIR CLAUSES TB!!!
-
 
 set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
     int v=(rand() % num_var)+1;
+    bool unit_clause_found = false;
     for(int clause=0; clause<clauses.size(); clause++) {
         if(clauses[clause].size() == 1) {
                v=clauses[clause][0];
                break;
+        }
+    }
+    if(!unit_clause_found) {
+        for(int clause=0; clause<clauses.size(); clause++) {
+            int max =0, min=0;
+            for(int literal=0; literal<clauses[clause].size(); literal++) {
+                if(clauses[clause][literal] > max ) max = clauses[clause][literal];
+                if(clauses[clause][literal] < min ) min = clauses[clause][literal];
+            }
+            if(max<0) {
+                v=clauses[clause][0];
+                break;
+            }
+            if(min>0) {
+                v=clauses[clause][0];
+                break;
+            }
         }
     }
 
@@ -114,7 +135,7 @@ set<int> solver(set<int> w,int num_var, vector<vector<int> > clauses) {
                 if(clauses_prim_prim[clause].size() == 1) {
                     if(opposing[abs(clauses_prim_prim[clause][0])] == -clauses_prim_prim[clause][0]) {
                         return solver(w, num_var, clauses);
-                        return set<int>();
+                        //return set<int>();
 
                     }
                     else{
@@ -157,6 +178,8 @@ int main(int argc, char* argv[]) {
     string file = argv[1];
 
     bool done = false;
+    srand(time(0));
+    set<int> result = solver(set<int>(), clauses.nbVar, clauses.clauses);
     while(!done) {
         srand(time(0));
         set<int> result = solver(set<int>(), clauses.nbVar, clauses.clauses);
@@ -183,35 +206,6 @@ int main(int argc, char* argv[]) {
             }
             done = true;
         }
-        // else {
-        // cout << "FAIL for instance " <<  instanceName[0] << "\n" ;
-        // srand(time(0));
-        // set<int> result1 = solver(set<int>(), clauses.nbVar, clauses.clauses);
-        // cout << "results size " << result1.size() <<" \n";
-        // cout << "RESULTADO: " << result1.size() << "\n";
-        // int res_1;
-        // if (result1.size() == 0){
-        //     res_1 =0;
-        // }
-        // if (result1.size() > 0){
-        //     res_1 =1;
-        // }
-        // if (res == toParseOut(logfile)){
-        //     //cout << "SUCCES for instance " << instanceName[0]  <<" and it is \n";
-        //     if (res_1==1){
-        //     cout <<"s SATISFIABLE";
-        //     cout << "\n";
-        //     printSet(result1);
-        //     }
-        //     if (res_1==0){
-        //     cout <<"s UNSATISFIABLE";
-        //     }
-        // }
-        // else {
-        //     cout << "FAIL SND TIME for instance " <<  instanceName[0] << "\n" ;
-        // }
-
-        // }
     }
     
     return 0;
