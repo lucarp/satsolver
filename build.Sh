@@ -5,5 +5,7 @@
 # g++ -o $#.exe 
 
 
-g++ -o solver solver.cc ;
+#g++ -o solver solver.cc ;
 
+Read -p 'Saisissez le nom de l’exécutable' nomfichier
+g++ solver.cc -o $nomfichier
