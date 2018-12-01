@@ -5,5 +5,5 @@
 # g++ -o $#.exe 
 
 
-g++ -o solver.exe solver.cc ;
+g++ -o solver solver.cc ;
 
