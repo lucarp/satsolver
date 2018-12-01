@@ -14,32 +14,26 @@ struct solverResult {
   bool satisfiable;
 };
 
-void printVec(vector<int> vec) {
-    for(int k=0; k<vec.size();k++) {
-        cout << vec[k] << " ";
-    }
-    cout << "\n";
+bool sortAbs(int j, int i) {
+    return abs(j)<abs(i);
 }
 
-void printSet(vector<int> vec) {
-    vector<int>::iterator it = vec.begin();
-    if (vec.size()>0){
-      cout << "v ";
 
-    }
-    while(it != vec.end()) {
-        cout << (*it) << " ";
-        it++;
-    }
-    cout << "\n";
-}
+void printVec(vector<int> vec, int num_var) {
 
-void printVecVec(vector<vector<int> > vec) {
-    for(int k=0; k<vec.size();k++) {
-        for(int i=0; i<vec[k].size();i++) {
-            cout << vec[k][i] << " ";
+    for(int k=1; k<=num_var;k++) {
+        int c = 0;
+        for(int i=0; i<vec.size();i++) {
+            if(k==abs(vec[i])) {
+                c = vec[i];
+                break;
+            }
         }
-        cout << "\n";
+        if(c == 0) vec.push_back(-k);
+    }
+    sort(vec.begin(),vec.end(),sortAbs);
+    for(int k=0; k<num_var;k++) {
+        cout << vec[k] << " ";
     }
 }
 
@@ -49,7 +43,6 @@ vector<vector<int> > simplify(int l, vector<vector<int> > clauses) {
     for(vector<vector<int> >::iterator it=clauses_prim.begin(); it!=clauses_prim.end();) {
         bool removed_clause = false;
         for(int search_idx=0; search_idx<it->size(); search_idx++) {
-             // cout << "Tentando remover da clause "  << (*it)[search_idx] << " - "  << l <<  " \n";
             if((*it)[search_idx] == l) {
                 clauses_prim.erase(it);
                 try_negation = false;
@@ -94,13 +87,8 @@ solverResult solver(vector<int> w,int num_var, vector<vector<int> > clauses) {
         }
     }
 
-    // cout << " rand v = " << v << "\n";
 
    vector<vector<int> > clauses_prim = simplify(v, clauses);
-//     cout << "Prim clauses = \n";
-//    printVecVec(clauses_prim);
-
-   //Verifie si il n'y ont que clauses vides
    bool clauses_prim_contains_empty_clause = false;
    vector<int> opposing(num_var+1,0);
    for(int clause=0; clause<clauses_prim.size(); clause++) {
@@ -128,7 +116,6 @@ solverResult solver(vector<int> w,int num_var, vector<vector<int> > clauses) {
    else {       
        if(clauses_prim_contains_empty_clause) {
             vector<vector<int> > clauses_prim_prim = simplify(-v, clauses);
-            // cout << "Prim prim clauses = \n"; printVecVec(clauses_prim_prim);
             bool clauses_prim_prim_contains_empty_clause = false;
             vector<int> opposing(num_var+1,0);
             for(int clause=0; clause<clauses_prim_prim.size(); clause++) {
@@ -196,14 +183,13 @@ int main(int argc, char* argv[]) {
         if (result.satisfiable){
             cout <<"s SATISFIABLE";
             cout << "\n";
-            printSet(result.status);
+            printVec(result.status, clauses.nbVar);
             return 0;
         }
         else {
             result.status.pop_back();
         }
     }
-    printSet(result.status);
     cout <<"s UNSATISFIABLE";
     return 0;
 }
